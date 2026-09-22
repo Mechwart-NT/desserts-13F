@@ -8,10 +8,18 @@ interface DessertListProps {
 }
 
 const DessertList = ({ desserts }: DessertListProps) => {
-  const {items, decrementItem,incrementItem,addItem} = useCartStore()
+  const {items, decrementItem,incrementItem,addItem, removeItem} = useCartStore()
 
   const getQuantity = (name: string) =>
     items.find((item) => item.name === name)?.quantity ?? 0
+
+  const decrementOrRemove = (name: string) =>{
+    if(getQuantity(name) === 1){
+      removeItem(name)
+    }else{
+      decrementItem(name)
+    }
+  }
 
   return (
     <ul className={styles.list}>
@@ -22,7 +30,7 @@ const DessertList = ({ desserts }: DessertListProps) => {
             quantity={getQuantity(dessert.name)}
             onAdd={() => addItem(dessert)}
             onIncrement={() => incrementItem(dessert.name)}
-            onDecrement={() => decrementItem(dessert.name)}
+            onDecrement={() => decrementOrRemove(dessert.name)}
           />
         </li>
       ))}
